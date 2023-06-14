@@ -15,7 +15,7 @@ test("event should register", () => {
   expect(container["events"][eventName].count).toBe(1);
 });
 
-test("event should register on On(register: true)", () => {
+test("event should register on on(register: true)", () => {
   const eventName = "EventName";
   container.on(
     eventName,
