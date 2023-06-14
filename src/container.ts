@@ -1,12 +1,17 @@
+import Readable from "./types/store/readable";
+import Writable from "./types/store/writable";
 import Event from "./types/event";
 import Listener from "./types/functions/listener";
+import StartStopNotifier from "./types/functions/notifier";
+import { Subscribe, Unsubscribe, Update } from "./types/functions";
+import { safe_not_equal, noop } from "./util";
 
 // TODO Implement Container
 export default class Container {
   //#region event
   private events: { [id: string]: Event<unknown> } = {};
 
-  public On<T>(
+  public on<T>(
     name: string,
     callback: Listener<T>,
     register = false,
@@ -15,12 +20,11 @@ export default class Container {
     if (typeof this.events[name] !== "undefined") {
       this.events[name].listeners.push(callback as Listener<unknown>);
     } else if (register) {
-      this.RegisterEvent(name, registerCount);
+      this.register.event(name, registerCount);
       this.events[name].listeners.push(callback as Listener<unknown>);
     }
   }
-  public Fire<T>(name: string, eventData: T) {
-
+  public fire<T>(name: string, eventData: T) {
     if (
       typeof this.events[name] === "undefined" ||
       this.events[name].listeners.length <= 0 ||
@@ -34,9 +38,6 @@ export default class Container {
     }
     this.reduceEventCount(name);
   }
-  public RegisterEvent(name: string, count = -1) {
-    this.events[name] = { name, count, listeners: [] };
-  }
 
   private reduceEventCount(name: string): void {
     this.events[name].count > 0 ? this.events[name].count-- : null;
@@ -47,5 +48,95 @@ export default class Container {
   //#region pipline
   //#endregion
   //#region store
+  private stores: { [id: string]: Writable<unknown> | Readable<unknown> } = {};
+
+  // based on svelte source code here: https://github.com/sveltejs/svelte/blob/master/src/runtime/store/index.ts
+  public writable<T>(
+    name: string,
+    value?: T,
+    start: StartStopNotifier<T> = noop
+  ): Writable<T> {
+
+    let stop: Unsubscribe;
+    const subscribers: Set<Subscribe<T>> = new Set();
+
+    function set(new_value: T): void {
+      if (safe_not_equal(value, new_value)) {
+        value = new_value;
+        if (stop === noop) {
+          subscribers.forEach((subscriber) => {
+            subscriber(value as T);
+          });
+        }
+      }
+    }
+
+    function update(fn: Update<T>): void {
+      set(fn(value as T));
+    }
+
+    function subscribe(subscribe: Subscribe<T>): Unsubscribe {
+      subscribers.add(subscribe);
+      if (subscribers.size === 1) {
+        stop = start(set) || noop;
+      }
+      subscribe(value as T);
+
+      return () => {
+        subscribers.delete(subscribe);
+        if (subscribers.size === 0 && stop !== noop) {
+          stop();
+          stop = noop;
+        }
+      };
+    }
+
+    return { name, set, update, subscribe };
+  }
+
+  // based on svelte source code here: https://github.com/sveltejs/svelte/blob/master/src/runtime/store/index.ts
+  public readable<T>(
+    name: string,
+    value?: T,
+    start: StartStopNotifier<T> = noop
+  ): Readable<T> {
+    return {
+      name: name,
+      subscribe: this.writable(name, value, start).subscribe,
+    };
+  }
   //#endregion
+
+  public get get() {
+    return {
+      readable: <T>(name: string) => this.stores[name] as Readable<T>,
+      writable: <T>(name: string) => this.stores[name] as Writable<T>,
+    };
+  }
+
+  public get register() {
+    return {
+      // FIXME Invalidation & Rapid changes
+      readable: <T>(
+        name: string,
+        value?: T,
+        start: StartStopNotifier<T> = noop
+      ): void => {
+        const readable = this.readable(name, value, start);
+        this.stores[name] = readable;
+      },
+      // FIXME Invalidation & Rapid changes
+      writable: <T>(
+        name: string,
+        value?: T,
+        start: StartStopNotifier<T> = noop
+      ): void => {
+        const writable = this.writable(name, value, start);
+        this.stores[name] = writable;
+      },
+      event: (name: string, count = -1) => {
+        this.events[name] = { name, count, listeners: [] };
+      },
+    };
+  }
 }

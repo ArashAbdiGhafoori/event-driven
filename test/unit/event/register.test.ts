@@ -9,7 +9,7 @@ beforeEach(()=>{
 
 test("event should register", () => {
   const eventName = "EventName";
-  container.RegisterEvent(eventName, 1);
+  container.register.event(eventName, 1);
 
   expect(container["events"][eventName]).toBeDefined();
   expect(container["events"][eventName].count).toBe(1);
@@ -17,7 +17,7 @@ test("event should register", () => {
 
 test("event should register on On(register: true)", () => {
   const eventName = "EventName";
-  container.On(
+  container.on(
     eventName,
     () => {
       return;
