@@ -3,8 +3,9 @@ import Writable from "./types/store/writable";
 import Event from "./types/event";
 import Listener from "./types/functions/listener";
 import StartStopNotifier from "./types/functions/notifier";
-import { Subscribe, Unsubscribe, Update } from "./types/functions";
+import { Pipe, Subscribe, Unsubscribe, Update } from "./types/functions";
 import { safe_not_equal, noop } from "./util";
+import Pipeline from "./types/pipeline";
 
 // TODO Implement Container
 export default class Container {
@@ -46,6 +47,16 @@ export default class Container {
   //#region cqrs
   //#endregion
   //#region pipline
+  private pipelines: { [id: string]: Pipeline<unknown> } = {};
+
+  public pipe<T>(pipeline: string, input: T): T {
+    const line = this.pipelines[pipeline] as Pipeline<T>;
+    line.pipes.forEach((p) => {
+      console.log(input);
+      input = p(input);
+    });
+    return input;
+  }
   //#endregion
   //#region store
   private stores: { [id: string]: Writable<unknown> | Readable<unknown> } = {};
@@ -56,7 +67,6 @@ export default class Container {
     value?: T,
     start: StartStopNotifier<T> = noop
   ): Writable<T> {
-
     let stop: Unsubscribe;
     const subscribers: Set<Subscribe<T>> = new Set();
 
@@ -116,6 +126,19 @@ export default class Container {
 
   public get register() {
     return {
+      pipeline: (name: string) => {
+        this.pipelines[name] = { name, pipes: [] };
+      },
+      pipe: <T>(pipeline: string, pipe: Pipe<T>, at = 0, register = false) => {
+        if (typeof this.pipelines[pipeline] === "undefined" && !register) {
+          return;
+        }
+        if (typeof this.pipelines[pipeline] === "undefined") {
+          this.register.pipeline(pipeline);
+          this.pipelines[pipeline].pipes.splice(at, 0, pipe as Pipe<unknown>);
+        }
+        this.pipelines[pipeline].pipes.splice(at, 0, pipe as Pipe<unknown>);
+      },
       // FIXME Invalidation & Rapid changes
       readable: <T>(
         name: string,
