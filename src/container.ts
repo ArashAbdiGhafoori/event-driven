@@ -1,14 +1,19 @@
-import Readable from "./types/store/readable";
-import Writable from "./types/store/writable";
-import Event from "./types/event";
-import Listener from "./types/functions/listener";
-import StartStopNotifier from "./types/functions/notifier";
-import { Pipe, Subscribe, Unsubscribe, Update } from "./types/functions";
+import type Readable from "./types/store/readable";
+import type Writable from "./types/store/writable";
+import type Handler from "./types/cqrs/handler";
+import type Request from "./types/cqrs/request";
+import type Event from "./types/event";
+import type Listener from "./types/functions/listener";
+import type StartStopNotifier from "./types/functions/notifier";
+import type { Pipe, Subscribe, Unsubscribe, Update } from "./types/functions";
+import type Pipeline from "./types/pipeline";
 import { safe_not_equal, noop } from "./util";
-import Pipeline from "./types/pipeline";
+
 
 // TODO Implement Container
 export default class Container {
+  //#region di
+  //#endregion
   //#region event
   private events: { [id: string]: Event<unknown> } = {};
 
@@ -45,6 +50,12 @@ export default class Container {
   }
   //#endregion
   //#region cqrs
+  private handlers: { [id: string]: Handler<Request<unknown>, unknown> } = {};
+
+  public handle<T extends Request<J>, J>(request: T): J {
+    const handler = this.handlers[request.name] as Handler<T, J>;
+    return handler.handle(request);
+  }
   //#endregion
   //#region pipline
   private pipelines: { [id: string]: Pipeline<unknown> } = {};
@@ -52,7 +63,6 @@ export default class Container {
   public pipe<T>(pipeline: string, input: T): T {
     const line = this.pipelines[pipeline] as Pipeline<T>;
     line.pipes.forEach((p) => {
-      console.log(input);
       input = p(input);
     });
     return input;
@@ -126,6 +136,12 @@ export default class Container {
 
   public get register() {
     return {
+      handler: <T extends Request<J>, J>(
+        name: string,
+        handle: (request: T) => J
+      ) => {
+        this.handlers[name] = { name, handle };
+      },
       pipeline: (name: string) => {
         this.pipelines[name] = { name, pipes: [] };
       },
