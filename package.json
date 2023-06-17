@@ -2,7 +2,7 @@
   "name": "evma",
   "version": "1.0.0",
   "description": "Let's see what we come up with.",
-  "main": "index.js",
+  "main": "./src/main.js",
   "scripts": {
     "test": "npx jest",
     "test:coverage": "npm test -- --coverage",
