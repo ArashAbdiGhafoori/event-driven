@@ -8,11 +8,13 @@ import type StartStopNotifier from "./types/functions/notifier";
 import type { Pipe, Subscribe, Unsubscribe, Update } from "./types/functions";
 import type Pipeline from "./types/pipeline";
 import { safe_not_equal, noop } from "./util";
-
+import Service from "./types/di/service";
 
 // TODO Implement Container
 export default class Container {
   //#region di
+  private items: Map<string, unknown> = new Map<string, unknown>();
+
   //#endregion
   //#region event
   private events: { [id: string]: Event<unknown> } = {};
@@ -131,11 +133,17 @@ export default class Container {
     return {
       readable: <T>(name: string) => this.stores[name] as Readable<T>,
       writable: <T>(name: string) => this.stores[name] as Writable<T>,
+      service: <T>(name: string) => this.items.get(name) as T,
     };
   }
 
   public get register() {
     return {
+      service: <T extends Service<J>, J>(service: T) => {
+        if (!this.items.has(service.name)) {
+          this.items.set(service.name, service);
+        }
+      },
       handler: <T extends Request<J>, J>(
         name: string,
         handle: (request: T) => J
