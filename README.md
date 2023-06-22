@@ -2,9 +2,9 @@
    <b>
         Evma
     </b>
-    <small><small><small>
+    <sup><sub><sub>
         ( Work in progress ... )
-    </small></small></small>
+    </sub></sub></sup>
 </h1>
 
 <p align="center">An easy way to manage events, pipelines, services, stores and cqrs in Typescript.</p>
@@ -34,22 +34,19 @@
 
 ## Table of Contents
 
-  - [Features](#features)
-  - [License](#license)
+- [Features](#features)
+- [License](#license)
 
-<br />
 <br />
 
 ## Features
 
-  - [Event](./docs/event.md)
-  - [Store](./docs/store.md)
-  - [Pipeline](./docs/pipeline.md)
-  - [Command and query responsibility separation](./docs/cqrs.md)
-  - [Dependency injection](./docs/dependency-injection.md)
+- [Event](./docs/event.md)
+- [Store](./docs/store.md)
+- [Pipeline](./docs/pipeline.md)
+- [Command and query responsibility separation](./docs/cqrs.md)
+- [Dependency injection](./docs/dependency-injection.md)
 
-
-<br />
 <br />
 
 ## License

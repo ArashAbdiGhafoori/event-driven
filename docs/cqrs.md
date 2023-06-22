@@ -2,7 +2,7 @@
    <b>
         Command and query responsibility separation
     </b>
-    <small><small><small>
+    <sup><sub><sub>
         ( Work in progress ... )
-    </small></small></small>
+    </sub></sub></sup>
 </h1>
