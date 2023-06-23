@@ -18,12 +18,11 @@ test("singleton should be available through container.get.service(<service-name>
     instance: serviceInstance,
   });
 
-  const actual = container.get.service(serviceName) as Service<{
+  const actual = container.get.service(serviceName) as {
     test: string;
-  }>;
+  };
   expect(actual).toBeDefined();
-  expect(actual.instance).toBeDefined();
-  expect(actual.instance?.test).toBe(expected);
+  expect(actual?.test).toBe(expected);
 });
 
 test("transient should be available through container.get.service(<service-name>)", () => {
@@ -41,9 +40,5 @@ test("transient should be available through container.get.service(<service-name>
     test: string;
   }>;
   expect(actual).toBeDefined();
-  expect(actual.factory).toBeDefined();
-  if (actual.factory) {
-    expect(actual.factory()).toBeDefined();
-    expect(actual.factory()).toBe(expected);
-  }
+  expect(actual).toBe(expected);
 });
