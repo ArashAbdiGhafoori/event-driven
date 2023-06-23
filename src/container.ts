@@ -133,7 +133,22 @@ export default class Container {
     return {
       readable: <T>(name: string) => this.stores[name] as Readable<T>,
       writable: <T>(name: string) => this.stores[name] as Writable<T>,
-      service: <T>(name: string) => this.items.get(name) as T,
+      service: <T>(name: string) => {
+        const service: Service<T> = this.items.get(name) as Service<T>;
+        const factory = service?.factory ?? noop;
+        return service.life == "Singleton" || service.life == "Both"
+          ? service.instance
+          : service.life == "Transient"
+          ? factory()
+          : undefined;
+      },
+      transient: <T>(name: string) => {
+        const service: Service<T> = this.items.get(name) as Service<T>;
+        const factory = service?.factory ?? noop;
+        return service.life == "Transient"
+          ? factory()
+          : undefined;
+      },
     };
   }
 
