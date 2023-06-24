@@ -10,7 +10,7 @@ beforeEach(() => {
 test("writable should register", () => {
   const storeName = "StoreName";
 
-  container.register.writable(storeName, "WOW");
+  container.register.writable(storeName, "test");
   const actual = container.get.writable(storeName);
   expect(actual).toBeDefined();
   expect(actual.name).toBe(storeName);
@@ -22,7 +22,7 @@ test("writable should register", () => {
 test("readable should register", () => {
   const storeName = "StoreName";
 
-  container.register.readable(storeName, "WOW");
+  container.register.readable(storeName, "test");
   const actual = container.get.readable(storeName);
   expect(actual).toBeDefined();
   expect(actual.name).toBe(storeName);

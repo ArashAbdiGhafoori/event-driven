@@ -136,17 +136,14 @@ export default class Container {
       service: <T>(name: string) => {
         const service: Service<T> = this.items.get(name) as Service<T>;
         const factory = service?.factory;
-        if (service.life == "Singleton" || service.life == "Both")
+        if (service && (service.life == "Singleton" || service.life == "Both"))
           return service.instance;
         if (factory) return factory();
       },
       transient: <T>(name: string) => {
         const service: Service<T> = this.items.get(name) as Service<T>;
         const factory = service?.factory;
-        if (factory)
-          return service.life == "Transient" || service.life == "Both"
-            ? factory()
-            : undefined;
+        if (factory) return factory();
       },
     };
   }

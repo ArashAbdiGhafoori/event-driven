@@ -36,9 +36,62 @@ test("transient should be available through container.get.service(<service-name>
     },
   });
 
-  const actual = container.get.service(serviceName) as Service<{
-    test: string;
-  }>;
+  const actual = container.get.service(serviceName) as Service<string>;
   expect(actual).toBeDefined();
   expect(actual).toBe(expected);
+});
+
+test("transient should not be available through container.get.service(<service-name>) without factory", () => {
+  const serviceName = "ServiceName";
+  container.register.service<Service<string>, string>({
+    name: serviceName,
+    life: "Transient",
+  });
+
+  const actual = container.get.service(serviceName) as Service<string>;
+  expect(actual).not.toBeDefined();
+});
+
+test("transient should not be available through container.get.service(<service-name>) without register", () => {
+  const serviceName = "ServiceName";
+
+  const actual = container.get.service(serviceName) as Service<string>;
+  expect(actual).not.toBeDefined();
+});
+
+describe("singleton-transient", () => {
+  const serviceName = "ServiceName";
+
+  const expectedSingleton = "ExpectedSingleton";
+  const expectedTransient = "ExpectedTransient";
+
+  const set = () => {
+    container.register.service<Service<string>, string>({
+      name: serviceName,
+      life: "Both",
+      instance: expectedSingleton,
+      factory() {
+        return expectedTransient;
+      },
+    });
+  };
+
+  test("should be available through container.get.service(<service-name>) and container.get.transient(<service-name>)", () => {
+    set();
+    const actual = container.get.service(serviceName) as string;
+    expect(actual).toBeDefined();
+    expect(actual).toBe(expectedSingleton);
+  });
+
+  test("should be available through and container.get.transient(<service-name>)", () => {
+    set();
+    const actual = container.get.transient(serviceName) as string;
+    expect(actual).toBeDefined();
+    expect(actual).toBe(expectedTransient);
+  });
+
+  test("should not be available through and container.get.transient(<service-name>)", () => {
+    const actual = container.get.transient(serviceName) as string;
+    expect(actual).not.toBeDefined();
+  });
 });
