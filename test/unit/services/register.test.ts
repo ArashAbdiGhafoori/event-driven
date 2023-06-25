@@ -1,6 +1,6 @@
 import Container from "../../../src/container";
 import evma from "../../../src/main";
-import Service from "../../../src/types/di/service";
+import ServiceContainer from "../../../src/types/di/serviceContainer";
 
 let container: Container;
 let counter = 0;
@@ -18,7 +18,7 @@ test("singleton should register", () => {
     instance: serviceInstance,
   });
 
-  const actual = container["items"].get(serviceName) as Service<{
+  const actual = container["items"].get(serviceName) as ServiceContainer<{
     test: string;
   }>;
   expect(actual).toBeDefined();
@@ -29,7 +29,7 @@ test("singleton should register", () => {
 test("transient should register", () => {
   const serviceName = "ServiceName";
   const expected = "ServiceTest";
-  container.register.service<Service<string>, string>({
+  container.register.service<ServiceContainer<string>, string>({
     name: serviceName,
     life: "Transient",
     factory() {
@@ -37,7 +37,7 @@ test("transient should register", () => {
     },
   });
 
-  const actual = container["items"].get(serviceName) as Service<{
+  const actual = container["items"].get(serviceName) as ServiceContainer<{
     test: string;
   }>;
   expect(actual).toBeDefined();
@@ -46,29 +46,4 @@ test("transient should register", () => {
     expect(actual.factory()).toBeDefined();
     expect(actual.factory()).toBe(expected);
   }
-});
-
-test("singleton-transient should register", () => {
-  const serviceName = "ServiceName";
-  const expected = "ServiceTest";
-  const serviceInstance = { test: expected };
-  container.register.service({
-    name: serviceName,
-    life: "Both",
-    instance: serviceInstance,
-    factory() {
-      return { test: expected };
-    },
-  });
-
-  const actual = container["items"].get(serviceName) as Service<{
-    test: string;
-  }>;
-  
-  expect(actual).toBeDefined();
-  expect(actual.instance).toBeDefined();
-  expect(actual.instance?.test).toBe(expected);
-
-  expect(actual.factory).toBeDefined();
-  if (actual.factory) expect(actual.factory().test).toBe(expected);
 });

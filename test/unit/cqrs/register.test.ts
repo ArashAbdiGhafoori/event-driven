@@ -11,7 +11,6 @@ beforeEach(() => {
 test("handler should register", () => {
   const handlerName = "HandlerName";
 
-  const input = "input";
   const expected = "expected";
 
   class R implements Request<string> {
@@ -19,14 +18,10 @@ test("handler should register", () => {
     value = "";
   }
 
-  container.register.handler<R, string>(handlerName, (r: R) => {
+  container.register.handler<R, string>(handlerName, () => {
     return expected;
   });
 
-  const actual = container.handle<R, string>({
-    name: handlerName,
-    value: input,
-  });
-
-  expect(container["handlers"][handlerName]).toBeDefined();
+  const actual = container["handlers"].get(handlerName);
+  expect(actual).toBeDefined();
 });

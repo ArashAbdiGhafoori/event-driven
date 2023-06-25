@@ -12,5 +12,5 @@ test("container should return without reinitializing", () => {
   let actual = evma.container(name, true);
   actual.register.event(eventName);
   actual = evma.container(name);
-  expect(actual["events"][eventName]).toBeDefined();
+  expect(actual["events"].get(eventName)).toBeDefined();
 });
