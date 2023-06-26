@@ -10,9 +10,9 @@
 ## Table of Contents
 
 - [Registering](#registering)
-  - [Transient](#btransient-serviceb)
-  - [Singleton](#bsingleton-serviceb)
-  - [Register it](#bfinally-register-itb)
+  - [Transient](#transient-service)
+  - [Singleton](#singleton-service)
+  - [Register it](#finally-register-it)
 - [Injecting](#injecting)
 
 <br />
@@ -74,11 +74,13 @@ const container = evma.container("<container-name>");
 container.register.service(service);
 ```
 
+<br />
+
 ## Injecting
 
 Things to remember:
 
-- `TService` Type is not `ServiceContainer<TService>` it's simply the type of your service, for example if your service's type is `UserManager` you will call `evma.get.service<UserManager>(service);`
+- `TService` type is not `ServiceContainer<TService>` it's simply the type of your service, for example if your service's type is `UserManager` you will call `evma.get.service<UserManager>(service);`
 
 To Inject your service you'll need to simply get it from container, it's the same for transient or singleton:
 
@@ -91,8 +93,6 @@ or ignore `TService`:
 ```ts
 const serviceContainer = evma.get.service(service);
 ```
-
-<br />
 
 so to inject it to a class like `TestClass`, simply do this:
 
@@ -112,3 +112,5 @@ or if TService has a static `name` property:
     this.myService = evma.get.service(TService.name)
 ...
 ```
+
+<br />
