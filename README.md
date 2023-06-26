@@ -30,7 +30,6 @@
 </div>
 
 <br />
-<br />
 
 ## Table of Contents
 
@@ -44,7 +43,7 @@
 - [Event](./docs/event.md)
 - [Store](./docs/store.md)
 - [Pipeline](./docs/pipeline.md)
-- [Command and query responsibility separation](./docs/cqrs.md)
+- [Command and query responsibility segregation](./docs/cqrs.md)
 - [Dependency injection](./docs/dependency-injection.md)
 
 <br />
