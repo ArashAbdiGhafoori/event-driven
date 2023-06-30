@@ -67,18 +67,11 @@ const serviceContainer = {
 evma.register.service(service);
 ```
 
-or with a instanced container:
-
-```ts
-const container = evma.container("<container-name>");
-container.register.service(service);
-```
-
 ## Injecting
 
 Things to remember:
 
-- `TService` Type is not `ServiceContainer<TService>` it's simply the type of your service, for example if your service's type is `UserManager` you will call `evma.get.service<UserManager>(service);`
+- *`TService`* type is not _`ServiceContainer<TService>`_ it's simply the type of your service, for example if your service's type is _`UserManager`_ you will call _`evma.get.service<UserManager>(service);`_
 
 To Inject your service you'll need to simply get it from container, it's the same for transient or singleton:
 
@@ -91,8 +84,6 @@ or ignore `TService`:
 ```ts
 const serviceContainer = evma.get.service(service);
 ```
-
-<br />
 
 so to inject it to a class like `TestClass`, simply do this:
 
