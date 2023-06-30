@@ -79,7 +79,6 @@ export default class Container {
    *
    * @param request The request to handle.
    * @returns The response of handler.
-   * @throws NotRegistered
    */
   public handle<T extends Request<J>, J>(request: T): J {
     const handler = this.handlers.get(request.name) as Handler<T, J>;
