@@ -8,6 +8,24 @@ beforeEach(() => {
   container = evma.container(`${counter++}`, true);
 });
 
+test("handler should return undefined when handler is not registered", () => {
+  const handlerName = "HandlerName";
+
+  const input = "input";
+  const expected = "expected";
+
+  class R implements Request<string> {
+    name = handlerName;
+    value?: string;
+  }
+  const actual = container.handle<R, string>({
+    name: handlerName,
+    value: input,
+  });
+
+  expect(actual).not.toBeDefined();
+});
+
 test("handler should handle", () => {
   const handlerName = "HandlerName";
 

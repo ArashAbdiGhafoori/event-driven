@@ -1,5 +1,6 @@
 import Container from "../../../src/container";
 import evma from "../../../src/main";
+import { Event } from "../../../src/types";
 
 let container: Container;
 let counter = 0;
@@ -11,9 +12,12 @@ test("event should register", () => {
   const eventName = "EventName";
   container.register.event(eventName, 1);
 
-  const actual = container["events"].get(eventName);
+  const actual = container["store"].get(eventName) as {
+    type: "event";
+    value: Event<unknown>;
+  };
   expect(actual).toBeDefined();
-  if (actual) expect(actual.count).toBe(1);
+  if (actual) expect(actual.value.count).toBe(1);
 });
 
 test("event should register on on(register: true)", () => {
@@ -26,7 +30,10 @@ test("event should register on on(register: true)", () => {
     true,
     1
   );
-  const actual = container["events"].get(eventName);
+  const actual = container["store"].get(eventName) as {
+    type: "event";
+    value: Event<unknown>;
+  };
   expect(actual).toBeDefined();
-  if (actual) expect(actual.count).toBe(1);
+  if (actual) expect(actual.value.count).toBe(1);
 });

@@ -7,6 +7,16 @@ beforeEach(() => {
   container = evma.container(`${counter++}`, true);
 });
 
+test("pipe should not work when nothing is registered", () => {
+  const pipelineName = "PiplineName";
+
+  const input = "expected";
+  const expected = "expected";
+
+  const actual = container.pipe(pipelineName, input);
+  expect(actual).toBe(expected);
+});
+
 test("pipe should work", () => {
   const pipelineName = "PiplineName";
 

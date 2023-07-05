@@ -18,12 +18,17 @@ test("singleton should register", () => {
     instance: serviceInstance,
   });
 
-  const actual = container["items"].get(serviceName) as ServiceContainer<{
-    test: string;
-  }>;
+  const actual = container["store"].get(serviceName) as {
+    type: "service";
+    value: ServiceContainer<{
+      test: string;
+    }>;
+  };
   expect(actual).toBeDefined();
-  expect(actual.instance).toBeDefined();
-  expect(actual.instance?.test).toBe(expected);
+  if (actual) {
+    expect(actual.value.instance).toBeDefined();
+    expect(actual.value.instance?.test).toBe(expected);
+  }
 });
 
 test("transient should register", () => {
@@ -37,13 +42,16 @@ test("transient should register", () => {
     },
   });
 
-  const actual = container["items"].get(serviceName) as ServiceContainer<{
-    test: string;
-  }>;
+  const actual = container["store"].get(serviceName) as {
+    type: "service";
+    value: ServiceContainer<{
+      test: string;
+    }>;
+  };
   expect(actual).toBeDefined();
-  expect(actual.factory).toBeDefined();
-  if (actual.factory) {
-    expect(actual.factory()).toBeDefined();
-    expect(actual.factory()).toBe(expected);
+  expect(actual.value.factory).toBeDefined();
+  if (actual.value.factory) {
+    expect(actual.value.factory()).toBeDefined();
+    expect(actual.value.factory()).toBe(expected);
   }
 });

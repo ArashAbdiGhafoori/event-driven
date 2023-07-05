@@ -22,6 +22,6 @@ test("handler should register", () => {
     return expected;
   });
 
-  const actual = container["handlers"].get(handlerName);
+  const actual = container["store"].get(handlerName);
   expect(actual).toBeDefined();
 });
