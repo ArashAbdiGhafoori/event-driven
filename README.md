@@ -1,6 +1,6 @@
 <h1 align="center">
    <b>
-        Evma
+        Mediator
     </b>
     <sup><sub><sub>
         ( Work in progress ... )
