@@ -19,7 +19,7 @@
 To install mediator and get started use:
 
 ```bash
-$ npm install @arashghafoori/mediator
+npm install @arashghafoori/mediator
 ```
 
 <br />
