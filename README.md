@@ -55,7 +55,7 @@
 To install mediator use the command:
 
 ```bash
-$ npm install @arashghafoori/mediator
+npm install @arashghafoori/mediator
 ```
 
 
