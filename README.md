@@ -19,7 +19,7 @@
 [![coverage:branches][coverage:branches-image]](coverage)
 [![License][license-image]][license-url]
 
-[build-image]: https://img.shields.io/github/actions/workflow/status/ArashAbdiGhafoori/mediator/jest.yml?label=build&branch=main
+[build-image]: https://img.shields.io/github/actions/workflow/status/ArashAbdiGhafoori/evma/jest.yml?label=build&branch=main
 [coverage:functions-image]: ./coverage/badge-functions.svg
 [coverage:statements-image]: ./coverage/badge-statements.svg
 [coverage:lines-image]: ./coverage/badge-lines.svg
