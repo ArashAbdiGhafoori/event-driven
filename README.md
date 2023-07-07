@@ -34,6 +34,8 @@
 ## Table of Contents
 
 - [Features](#features)
+- [Installation](#installation)
+- [Getting start](./docs/getting-started.md)
 - [License](#license)
 
 <br />
@@ -45,6 +47,17 @@
 - [Pipeline](./docs/pipeline.md)
 - [Command and query responsibility segregation](./docs/cqrs.md)
 - [Dependency injection](./docs/dependency-injection.md)
+
+<br />
+
+## Installation
+
+To install mediator use the command:
+
+```bash
+$ npm install @arashghafoori/mediator
+```
+
 
 <br />
 
