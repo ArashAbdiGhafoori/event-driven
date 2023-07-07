@@ -1,11 +1,11 @@
 import Container from "../../../src/container";
-import evma from "../../../src/main";
+import mediator from "../../../src/main";
 import ServiceContainer from "../../../src/types/di/serviceContainer";
 
 let container: Container;
 let counter = 0;
 beforeEach(() => {
-  container = evma.container(`${counter++}`, true);
+  container = mediator.container(`${counter++}`, true);
 });
 
 test("singleton should register", () => {

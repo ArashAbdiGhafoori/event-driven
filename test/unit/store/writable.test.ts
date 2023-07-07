@@ -1,10 +1,10 @@
 import Container from "../../../src/container";
-import evma from "../../../src/main";
+import mediator from "../../../src/main";
 
 let container: Container;
 let counter = 0;
 beforeEach(() => {
-  container = evma.container(`${counter++}`, true);
+  container = mediator.container(`${counter++}`, true);
 });
 
 test("store should set", () => {
@@ -52,17 +52,16 @@ test("store should update", () => {
   expect(actual).toBe(expected);
 });
 
-
 test("store should unsubscribe", () => {
   const storeName = "StoreName";
 
   const expected = 3;
   let actual = 0;
-  const store = container.writable(storeName, 1, (()=>{
-    return ()=>{
+  const store = container.writable(storeName, 1, () => {
+    return () => {
       actual = expected;
-    }
-  }));
+    };
+  });
 
   const unsub = store.subscribe((s) => {
     actual = s;

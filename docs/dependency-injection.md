@@ -64,13 +64,13 @@ const serviceContainer = {
 #### <b>Finally register it</b>:
 
 ```ts
-evma.register.service(service);
+mediator.register.service(service);
 ```
 
 or with a instanced container:
 
 ```ts
-const container = evma.container("<container-name>");
+const container = mediator.container("<container-name>");
 container.register.service(service);
 ```
 
@@ -78,18 +78,18 @@ container.register.service(service);
 
 Things to remember:
 
-- `TService` Type is not `ServiceContainer<TService>` it's simply the type of your service, for example if your service's type is `UserManager` you will call `evma.get.service<UserManager>(service);`
+- `TService` Type is not `ServiceContainer<TService>` it's simply the type of your service, for example if your service's type is `UserManager` you will call `mediator.get.service<UserManager>(service);`
 
 To Inject your service you'll need to simply get it from container, it's the same for transient or singleton:
 
 ```ts
-const serviceContainer = evma.get.service<TService>(service);
+const serviceContainer = mediator.get.service<TService>(service);
 ```
 
 or ignore `TService`:
 
 ```ts
-const serviceContainer = evma.get.service(service);
+const serviceContainer = mediator.get.service(service);
 ```
 
 so to inject it to a class like `TestClass`, simply do this:
@@ -98,7 +98,7 @@ so to inject it to a class like `TestClass`, simply do this:
 class TestClass {
   private myService: TService;
   constructor() {
-    this.myService = evma.get.service("serviceName");
+    this.myService = mediator.get.service("serviceName");
   }
 }
 ```
@@ -107,7 +107,7 @@ or if TService has a static `name` property:
 
 ```ts
 ...
-    this.myService = evma.get.service(TService.name)
+    this.myService = mediator.get.service(TService.name)
 ...
 ```
 

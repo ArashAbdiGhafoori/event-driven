@@ -5,7 +5,7 @@
   "main": "./src/main.ts",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ArashAbdiGhafoori/evma.git"
+    "url": "https://github.com/ArashAbdiGhafoori/mediator.git"
   },
   "scripts": {
     "test": "npx jest",

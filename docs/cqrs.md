@@ -24,7 +24,7 @@ Things to consider:
 With _`<handler-name>`_ being the name we use to handle requests with, the _`<callback>_` being the callback that will handle the request, *`TRequest`* being the type of request and *`TRequestResponse`\* being the type of response, we register an handler like so:
 
 ```ts
-  evma.register.handler<TRequest, TRequestResponse>(
+  mediator.register.handler<TRequest, TRequestResponse>(
     handler-name: string,
     callback: (request: TRequest) => TRequestResponse
   );
@@ -41,7 +41,7 @@ Things to consider:
 With _`<request>`_ being the request object that is passed to handler, _`TRequest`_ being the type of request and _`TRequestResponse`_ being the type of response, we handle an request like so:
 
 ```ts
-  let response = evma.handle<TRequest, TRequestResponse>(
+  let response = mediator.handle<TRequest, TRequestResponse>(
     request: TRequest
     );
 ```

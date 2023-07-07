@@ -1,10 +1,10 @@
 import Container from "../../../src/container";
-import evma from "../../../src/main";
+import mediator from "../../../src/main";
 
 let container: Container;
 let counter = 0;
 beforeEach(() => {
-  container = evma.container(`${counter++}`, true);
+  container = mediator.container(`${counter++}`, true);
 });
 
 test("pipeline should register", () => {

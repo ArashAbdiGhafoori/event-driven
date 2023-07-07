@@ -24,7 +24,7 @@ Things to consider:
 With _`<pipeline-name>`_ being the name to use the pipeline with, we register an pipeline like so:
 
 ```ts
-evma.register.pipeline(
+mediator.register.pipeline(
     pipeline-name: string
 );
 ```
@@ -40,7 +40,7 @@ Things to consider:
 With _`<pipeline-name>`_ being the name to use the pipeline with, _`callback`_ being the function that passes the value for the next pipe, _`at`_ being the index to insert the pipe at and the _`register`_ defining whether to register the pipe if not already registered, we register an pipeline like so:
 
 ```ts
-evma.register.pipe<T>(
+mediator.register.pipe<T>(
     pipeline-name: string,
     callback: Pipe<T>,
     at = 0,

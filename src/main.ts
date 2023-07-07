@@ -1,7 +1,7 @@
 import Container from "./container";
 
-class evma extends Container {
-  public static instance: evma;
+class mediator extends Container {
+  public static instance: mediator;
   private containers: { [id: string]: Container } = {};
 
   public container(name: string, create = false) {
@@ -11,6 +11,7 @@ class evma extends Container {
   }
 }
 
-if (typeof evma.instance === "undefined") evma.instance = new evma();
+if (typeof mediator.instance === "undefined")
+  mediator.instance = new mediator();
 
-export default evma.instance;
+export default mediator.instance;
