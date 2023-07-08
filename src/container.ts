@@ -33,20 +33,14 @@ export default class Container {
    * @param register Should automatically register the event if it's not there?
    * @param count If register is set to true, The number of times the event can be fired.
    */
-  public on<T>(
-    name: string,
-    callback: Listener<T>,
-    register = false,
-    count = -1
-  ): void {
-    let event = this.resolve<Event<T>>(name, "event");
-    if (register && !event) {
-      this.register.event(name, count);
-      event = this.resolve<Event<T>>(name, "event");
-    }
-    if (event) {
-      event.listeners.push(callback as Listener<T>);
-    }
+  public on<T>(name: string, callback: Listener<T>, count = -1): void {
+    this.resolve<Event<T>>(name, "event")?.listeners.push(
+      callback as Listener<T>
+    ) ??
+      this.store.set(name, {
+        type: "event",
+        value: { name, count, listeners: [callback] },
+      });
   }
 
   /** Fires the specified event with the input data.
@@ -57,19 +51,8 @@ export default class Container {
   public fire<T>(name: string, eventData: T): void {
     const event = this.resolve<Event<T>>(name, "event");
     if (!event || event.listeners.length <= 0 || event.count === 0) return;
-    for (let i = 0; i < event.listeners.length; i++) {
-      const listener = event.listeners[i];
-      listener(eventData);
-    }
-    this.reduceEventCount(name);
-  }
-
-  /** Reduces the count on event by 1.
-   *
-   * @param name The name of the event, which it's count should reduce.
-   */
-  private reduceEventCount(name: string): void {
-    const event = this.resolve<Event<unknown>>(name, "event");
+    for (let i = 0; i < event.listeners.length; i++)
+      event.listeners[i](eventData);
     if (event) event.count > 0 ? event.count-- : null;
   }
   //#endregion
@@ -281,13 +264,6 @@ export default class Container {
     if (pl) pl.pipes.splice(at, 0, pipe as Pipe<unknown>);
   };
 
-  private register_event = (name: string, count = -1) => {
-    this.store.set(name, {
-      type: "event",
-      value: { name, count, listeners: [] },
-    });
-  };
-
   public readonly register = {
     /** Register a writable store
      *
@@ -332,12 +308,5 @@ export default class Container {
      * @param register Register the pipe if not already there
      */
     pipe: this.register_pipe,
-
-    /** Register an event
-     *
-     * @param name The name of the event
-     * @param count The number of times the event runs, default = -1 (unlimited)
-     */
-    event: this.register_event,
   };
 }
