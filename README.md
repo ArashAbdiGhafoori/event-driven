@@ -1,10 +1,7 @@
 <h1 align="center">
    <b>
         Mediator
-    </b>
-    <sup><sub><sub>
-        ( Work in progress ... )
-    </sub></sub></sup>
+   </b>
 </h1>
 
 <p align="center">An easy way to manage events, pipelines, services, stores and cqrs in Typescript.</p>
