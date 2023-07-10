@@ -19,21 +19,21 @@
 
 ## Registering
 
-The container keeps both transient and singleton services in a `Map` and the registration is the same, the only thing that is different is the to whether add instance, factory or both!
+The container keeps both transient and singleton services in a _`Map`_ and the registration is the same, the only thing that is different is the to whether add instance, factory or both!
 
 Things to keep in mind:
 
-- The name of the service, by which you'll be able to get the service, is the `service.name` property of the service object you are registering.
+- The name of the service, by which you'll be able to get the service, is the _`service.name`_ property of the service object you are registering.
 
 - Services won't override so if an service with the same name exists, the new object will be ignored.
 
-- The `service.life` property of the service object is currently not used for anything and is there to check whether the return service is transient or singleton for you!
+- The _`service.life`_ property of the service object is currently not used for anything and is there to check whether the return service is transient or singleton for you!
 
 <br />
 
 #### <b>Transient Service</b>:
 
-To register a transient service you'll need a object implementing [Service Container](../src/types/di/serviceContainer.ts) with life being `Transient` and factory being a function that returns an instance of service:
+To register a transient service you'll need a object implementing [Service Container](../src/types/di/serviceContainer.ts) with life being _`Transient`_ and factory being a function that returns an instance of service:
 
 ```ts
 const serviceContainer = {
@@ -49,7 +49,7 @@ const serviceContainer = {
 
 #### <b>Singleton Service</b>:
 
-To register a singleton service you'll need a object implementing [Service](../src/types/di/serviceContainer.ts) with life being `Singleton` and `service.instance` being the singleton instance of the service:
+To register a singleton service you'll need a object implementing [Service](../src/types/di/serviceContainer.ts) with life being _`Singleton`_ and _`service.instance`_ being the singleton instance of the service:
 
 ```ts
 const serviceContainer = {
@@ -78,7 +78,7 @@ container.register.service(service);
 
 Things to remember:
 
-- `TService` Type is not `ServiceContainer<TService>` it's simply the type of your service, for example if your service's type is `UserManager` you will call `mediator.get.service<UserManager>(service);`
+- _`TService`_ Type is not _`ServiceContainer<TService>`_ it's simply the type of your service, for example if your service's type is _`UserManager`_ you will call _`mediator.get.service<UserManager>(service);`_
 
 To Inject your service you'll need to simply get it from container, it's the same for transient or singleton:
 
@@ -86,13 +86,13 @@ To Inject your service you'll need to simply get it from container, it's the sam
 const serviceContainer = mediator.get.service<TService>(service);
 ```
 
-or ignore `TService`:
+or ignore _`TService`_:
 
 ```ts
 const serviceContainer = mediator.get.service(service);
 ```
 
-so to inject it to a class like `TestClass`, simply do this:
+so to inject it to a class like _`TestClass`_, simply do this:
 
 ```ts
 class TestClass {
@@ -103,7 +103,7 @@ class TestClass {
 }
 ```
 
-or if TService has a static `name` property:
+or if TService has a static _`name`_ property:
 
 ```ts
 ...

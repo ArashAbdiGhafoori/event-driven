@@ -21,7 +21,7 @@ Things to consider:
 - Registering the same name will overwrite the existing handler.
 - Request is supposed to have an name property.
 
-With _`<handler-name>`_ being the name we use to handle requests with, the _`<callback>_` being the callback that will handle the request, *`TRequest`* being the type of request and *`TRequestResponse`\* being the type of response, we register an handler like so:
+With _`<handler-name>`_ being the name we use to handle requests with, the _`<callback>`_ being the callback that will handle the request, _`TRequest`_ being the type of request and _`TRequestResponse`_ being the type of response, we register an handler like so:
 
 ```ts
   mediator.register.handler<TRequest, TRequestResponse>(
