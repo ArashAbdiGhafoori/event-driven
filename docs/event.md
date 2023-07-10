@@ -9,26 +9,8 @@
 
 ## Table of Contents
 
-- [Registering](#registering)
 - [Listening](#listening)
 - [Firing](#firing)
-
-<br />
-
-## Registering
-
-Things to consider:
-
-- An event won't fire until there is at least one listener.
-- A listener can be fired with any data make sure to check inputs.
-
-With _`<event-name>`_ being the name we fire the event with and the _`<count>`_ being the number of times that the event can fire (default to -1 = unlimited), we register an event like so:
-
-```ts
-mediator.register.event(
-  event-name: string,
-  count: number);
-```
 
 <br />
 
@@ -37,6 +19,7 @@ mediator.register.event(
 Things to consider:
 
 - You can register an event if it doesn't exist by setting the register to true, also you can set the count as well.
+- events are registered when there are active listeners
 
 With _`<event-name>`_ being the name you registered the event with, the _`callback`_ being the function which is called with _`eventData`_ and _`TEventData`_ being the type of _`eventData`_, you can listen to an event by calling :
 
