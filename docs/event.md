@@ -18,7 +18,7 @@
 
 Things to consider:
 
-- You can register an event if it doesn't exist by setting the register to true, also you can set the count as well.
+- If the event does not exist it automatically registers it, also you can set the count as well.
 - events are registered when there are active listeners
 
 With _`<event-name>`_ being the name you registered the event with, the _`callback`_ being the function which is called with _`eventData`_ and _`TEventData`_ being the type of _`eventData`_, you can listen to an event by calling :
