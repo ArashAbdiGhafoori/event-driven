@@ -29,7 +29,6 @@ test("pipe should work", () => {
   const p2 = (i: string): string => (i === nd_string ? rd_string : "");
   const p3 = (i: string): string => (i === rd_string ? expected : "");
 
-  container.register.pipeline(pipelineName);
   container.register.pipe(pipelineName, p3);
   container.register.pipe(pipelineName, p2);
   container.register.pipe(pipelineName, p1);
@@ -50,7 +49,6 @@ test("pipe should work in order", () => {
   const p2 = (i: string): string => (i === nd_string ? rd_string : "");
   const p3 = (i: string): string => (i === rd_string ? expected : "");
 
-  container.register.pipeline(pipelineName);
   container.register.pipe(pipelineName, p2);
   container.register.pipe(pipelineName, p1, 0);
   container.register.pipe(pipelineName, p3, 2);
