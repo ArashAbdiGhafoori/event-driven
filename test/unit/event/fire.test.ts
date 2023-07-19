@@ -20,6 +20,23 @@ test("event should fire", () => {
   expect(actual).toBe(message);
 });
 
+test("event should fire in order", () => {
+
+  let actual = "";
+  const expected = "test";
+  container.on<{ message: string }>(eventName, (data) => {
+    actual = data.message;
+  });
+  container.on<{ message: string }>(eventName, () => {
+    actual = expected;
+  });
+  const message = "test message";
+
+  container.fire(eventName, { message });
+  expect(actual).toBe(expected);
+});
+
+
 test("event should fire once", () => {
   let actual = 0;
   container.on(eventName, () => {

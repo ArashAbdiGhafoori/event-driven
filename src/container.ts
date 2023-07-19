@@ -34,6 +34,8 @@ export default class Container {
    * @param count If register is set to true, The number of times the event can be fired.
    */
   public on<T>(name: string, callback: Listener<T>, count = -1): void {
+    console.log(this.resolve<Event<T>>(name, "event"));
+    
     this.resolve<Event<T>>(name, "event")?.listeners.push(
       callback as Listener<T>
     ) ??
@@ -244,24 +246,16 @@ export default class Container {
     this.store.set(name, { type: "handler", value: { name, handle } });
   };
 
-  private register_pipeline = (name: string) => {
-    this.store.set(name, { type: "pipeline", value: { name, pipes: [] } });
-  };
-
-  private register_pipe = <T>(
-    pipeline: string,
-    pipe: Pipe<T>,
-    at = 0,
-    register = false
-  ) => {
-    if (!this.store.has(pipeline) && !register) {
-      return;
+  private register_pipe = <T>(pipeline: string, pipe: Pipe<T>, at = 0) => {
+    if (!this.store.has(pipeline))
+      this.store.set(pipeline, {
+        type: "pipeline",
+        value: { name: pipeline, pipes: [pipe as Pipe<unknown>] },
+      });
+    else {
+      const pl = this.resolve<Pipeline<unknown>>(pipeline, "pipeline");
+      if (pl) pl.pipes.splice(at, 0, pipe as Pipe<unknown>);
     }
-    if (!this.store.has(pipeline)) {
-      this.register_pipeline(pipeline);
-    }
-    const pl = this.resolve<Pipeline<unknown>>(pipeline, "pipeline");
-    if (pl) pl.pipes.splice(at, 0, pipe as Pipe<unknown>);
   };
 
   public readonly register = {
@@ -293,12 +287,6 @@ export default class Container {
      * @param handle The callback to handle the request
      */
     handler: this.register_handler,
-
-    /** Register a pipeline
-     *
-     * @param name The name of the pipeline
-     */
-    pipeline: this.register_pipeline,
 
     /** Register pipe
      *
