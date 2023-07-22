@@ -1,6 +1,9 @@
 {
   "name": "@arashghafoori/mediator",
+<<<<<<< HEAD
   "version": "1.2.1",
+=======
+>>>>>>> a0aa244d3d6b2ba02c2a40dc5bb51ae03391d905
   "description": "An easy way to manage events, pipelines, services, stores and cqrs in Typescript.",
   "main": "./src/main.ts",
   "repository": {
