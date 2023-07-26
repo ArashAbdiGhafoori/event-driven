@@ -1,8 +1,9 @@
 {
   "name": "@arashghafoori/mediator",
-  "version": "1.2.2",
+  "version": "1.2.6",
   "description": "An easy way to manage events, pipelines, services, stores and cqrs in Typescript.",
   "main": "./lib/index.js",
+  "module": "./lib/index.mjs",
   "repository": {
     "type": "git",
     "url": "https://github.com/ArashAbdiGhafoori/mediator.git"

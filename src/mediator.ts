@@ -1,6 +1,6 @@
 import Container from "./container";
 
-class mediator extends Container {
+export default class mediator extends Container {
   public static instance: mediator;
   private containers: { [id: string]: Container } = {};
 
@@ -10,8 +10,3 @@ class mediator extends Container {
     return this.containers[name];
   }
 }
-
-if (typeof mediator.instance === "undefined")
-  mediator.instance = new mediator();
-
-export default mediator.instance;

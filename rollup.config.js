@@ -5,12 +5,14 @@ const production = !process.env.ROLLUP_WATCH;
 
 export default [
   {
-    input: "src/main.ts",
-    output: {
-      name: "index",
-      dir: "lib/",
-      format: "iife",
-    },
+    input: "src/index.ts",
+    output: [
+      { file: "lib/index.mjs", format: "es" },
+      {
+        dir: "lib/",
+        format: "cjs",
+      },
+    ],
     plugins: [
       nodeResolve(),
       // typescript({
