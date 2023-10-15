@@ -45,7 +45,7 @@ Then in the main - in my case _`main.ts`_ - file call the startup function:
 ```ts
 // startup.ts
 
-import mediator from "@arashghafoori/mediator";
+import { mediator } from "@arashghafoori/mediator";
 import startup from "./startup";
 
 startup(mediator);

@@ -1,5 +1,5 @@
 import Container from "../../../src/container";
-import mediator from "../../../src/index";
+import { mediator } from "../../../src/index";
 
 let container: Container;
 let counter = 0;

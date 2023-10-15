@@ -1,5 +1,5 @@
 import Container from "../../../src/container";
-import mediator from "../../../src/index";
+import { mediator } from "../../../src/index";
 import ServiceContainer from "../../../src/types/di/serviceContainer";
 
 let container: Container;
