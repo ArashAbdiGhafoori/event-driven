@@ -1,4 +1,4 @@
-import mediator from "../../src/main";
+import mediator from "../../src/index";
 
 test("container should create with mediator.container(<nonExistingName>)", () => {
   const name = "containerName";

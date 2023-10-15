@@ -1,5 +1,5 @@
 import Container from "../../../src/container";
-import mediator from "../../../src/main";
+import mediator from "../../../src/index";
 import Request from "../../../src/types/cqrs/request";
 
 let container: Container;
