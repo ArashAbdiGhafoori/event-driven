@@ -22,10 +22,6 @@ export class EventContainer extends BaseContainer {
       });
   }
 
-  public off(name: string) {
-    this.store.delete(name);
-  }
-
   /** Fires the specified event with the input data.
    *
    * @param name The name of the event to fire.

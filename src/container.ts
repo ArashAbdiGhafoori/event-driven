@@ -34,9 +34,10 @@ export default class Container extends LightContainer {
   //#endregion
 
   //#region store
-
+  
   /** Creates a writable store.
    *
+   * implemented like svelte :)
    * @param name The Name of the store.
    * @param value The value to create the store with.
    * @param start The notifier.
@@ -86,6 +87,7 @@ export default class Container extends LightContainer {
 
   /** Creates a readable store.
    *
+   * implemented like svelte :)
    * @param name The Name of the store.
    * @param value The value to create the store with.
    * @param start The notifier.

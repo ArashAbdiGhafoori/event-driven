@@ -1,7 +1,7 @@
 import Container from "./container";
 
-export default class mediator extends Container {
-  public static instance: mediator;
+export default class Mediator extends Container {
+  public static instance: Mediator;
   private containers: { [id: string]: Container } = {};
 
   public container(name: string, create = false) {

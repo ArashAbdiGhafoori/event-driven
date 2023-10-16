@@ -3,26 +3,35 @@ import ts from "rollup-plugin-ts";
 
 const production = !process.env.ROLLUP_WATCH;
 
+const default_config = (input, output) => ({
+  input: input,
+  output: output,
+  plugins: [
+    nodeResolve(),
+    ts({ tsconfig: production ? "tsconfig.json" : "tsconfig.json" }),
+  ],
+});
+
 export default [
-  {
-    input: "src/index.ts",
-    output: [
-      { file: "lib/index.mjs", format: "es" },
-      {
-        dir: "lib/",
-        format: "cjs",
-      },
-    ],
-    plugins: [
-      nodeResolve(),
-      // typescript({
-      //   module: "es6",
-      //   allowJs: true,
-      //   sourceMap: !production,
-      //   inlineSources: !production,
-      //   noImplicitAny: true,
-      // }),
-      ts({ tsconfig: production ? "tsconfig.json" : "tsconfig.json" }),
-    ],
-  },
+  default_config("src/index.ts", [
+    { file: "lib/index.mjs", format: "es" },
+    {
+      dir: "lib/",
+      format: "cjs",
+    },
+  ]),
+  default_config("src/event.ts", [
+    { file: "lib/event.mjs", format: "es" },
+    {
+      dir: "lib/",
+      format: "cjs",
+    },
+  ]),
+  default_config("src/light.ts", [
+    { file: "lib/light.mjs", format: "es" },
+    {
+      dir: "lib/",
+      format: "cjs",
+    },
+  ]),
 ];
