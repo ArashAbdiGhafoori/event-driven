@@ -1,9 +1,9 @@
-import Mediator from "./mediator";
+import Mediator from "./mediator.event";
 
 /**
- * A static instance of mediator.
+ * A static instance of EventContainer.
  *
- * It has all of the features (event, cqrs, dependency injection, pipeline, stores).
+ * This is the simplest version of the mediator with only event and cqrs features.
  */
 const MediatorInstance = (() => {
   Mediator.instance = Mediator.instance || new Mediator();

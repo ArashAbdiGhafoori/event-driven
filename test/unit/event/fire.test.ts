@@ -1,5 +1,5 @@
 import Container from "../../../src/container";
-import mediator from "../../../src/main";
+import { mediator } from "../../../src/index";
 
 const eventName = "EventName";
 let container: Container;
@@ -9,7 +9,6 @@ beforeEach(() => {
 });
 
 test("event should fire", () => {
-
   let actual = "";
   container.on<{ message: string }>(eventName, (data) => {
     actual = data.message;
@@ -21,7 +20,6 @@ test("event should fire", () => {
 });
 
 test("event should fire in order", () => {
-
   let actual = "";
   const expected = "test";
   container.on<{ message: string }>(eventName, (data) => {
@@ -36,12 +34,15 @@ test("event should fire in order", () => {
   expect(actual).toBe(expected);
 });
 
-
 test("event should fire once", () => {
   let actual = 0;
-  container.on(eventName, () => {
-    actual++;
-  }, 1);
+  container.on(
+    eventName,
+    () => {
+      actual++;
+    },
+    1
+  );
 
   const count = 3;
   for (let i = 0; i < count; i++) {
@@ -52,7 +53,6 @@ test("event should fire once", () => {
 });
 
 test("event should fire forever", () => {
-
   let actual = 0;
   container.on(eventName, () => {
     actual++;

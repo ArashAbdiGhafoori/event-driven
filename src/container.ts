@@ -1,76 +1,20 @@
+import { StoreEntry } from "./types/StoreEntry";
 import type {
   Readable,
   Writable,
-  Handler,
-  Request,
-  Event,
-  Listener,
   StartStopNotifier,
   Pipe,
   Subscribe,
   Unsubscribe,
   Update,
   Pipeline,
-  ServiceContainer,
 } from "./types";
 
 import { safe_not_equal, noop } from "./util";
+import { LightContainer } from "./container.light";
 
-export interface StoreEntry {
-  type: "readable" | "writable" | "event" | "pipeline" | "handler" | "service";
-  value: unknown;
-}
-
-export default class Container {
-  private store: Map<string, StoreEntry> = new Map<string, StoreEntry>();
-
-  //#region event
-
-  /** Listen to the specified event. optionally you can register it here.
-   *
-   * @param name The name of the event to listen.
-   * @param callback The callback to fire when event happens
-   * @param register Should automatically register the event if it's not there?
-   * @param count If register is set to true, The number of times the event can be fired.
-   */
-  public on<T>(name: string, callback: Listener<T>, count = -1): void {
-    console.log(this.resolve<Event<T>>(name, "event"));
-    
-    this.resolve<Event<T>>(name, "event")?.listeners.push(
-      callback as Listener<T>
-    ) ??
-      this.store.set(name, {
-        type: "event",
-        value: { name, count, listeners: [callback] },
-      });
-  }
-
-  /** Fires the specified event with the input data.
-   *
-   * @param name The name of the event to fire.
-   * @param eventData The Date to fire the event with.
-   */
-  public fire<T>(name: string, eventData: T): void {
-    const event = this.resolve<Event<T>>(name, "event");
-    if (!event || event.listeners.length <= 0 || event.count === 0) return;
-    for (let i = 0; i < event.listeners.length; i++)
-      event.listeners[i](eventData);
-    if (event) event.count > 0 ? event.count-- : null;
-  }
-  //#endregion
-
-  //#region cqrs
-
-  /** Sends a request to handle.
-   *
-   * @param request The request to handle.
-   * @returns The response of handler.
-   */
-  public handle<T extends Request<J>, J>(request: T): J | undefined {
-    const handler = this.resolve<Handler<T, J>>(request.name, "handler");
-    return handler?.handle(request);
-  }
-  //#endregion
+export default class Container extends LightContainer {
+  public store: Map<string, StoreEntry> = new Map<string, StoreEntry>();
 
   //#region pipline
 
@@ -90,9 +34,10 @@ export default class Container {
   //#endregion
 
   //#region store
-
+  
   /** Creates a writable store.
    *
+   * implemented like svelte :)
    * @param name The Name of the store.
    * @param value The value to create the store with.
    * @param start The notifier.
@@ -142,6 +87,7 @@ export default class Container {
 
   /** Creates a readable store.
    *
+   * implemented like svelte :)
    * @param name The Name of the store.
    * @param value The value to create the store with.
    * @param start The notifier.
@@ -159,35 +105,12 @@ export default class Container {
   }
   //#endregion
 
-  /** Resolves entries to types
-   *
-   * @param name The name of the entry to resolve.
-   * @param type The type to resolve
-   * @returns The resolved entry.
-   */
-  private resolve<T>(
-    name: string,
-    type: "readable" | "writable" | "event" | "pipeline" | "handler" | "service"
-  ) {
-    const entry = this.store.get(name);
-    if (entry && entry.type == type && entry.value) {
-      return entry.value as T;
-    }
-  }
-
   private get_readable_store = <T>(name: string) => {
     return this.resolve<Readable<T>>(name, "readable");
   };
 
   private get_writable_store = <T>(name: string) => {
     return this.resolve<Writable<T>>(name, "writable");
-  };
-
-  private get_service = <T>(name: string) => {
-    const service = this.resolve<ServiceContainer<T>>(name, "service");
-    const factory = service?.factory;
-    if (service && service.life == "Singleton") return service.instance;
-    if (factory) return factory();
   };
 
   public readonly get = {
@@ -210,7 +133,7 @@ export default class Container {
      * @param name The name of the service
      * @returns The service
      */
-    service: this.get_service,
+    service: this.service,
   };
 
   // FIXME Invalidation & Rapid changes
@@ -231,19 +154,6 @@ export default class Container {
   ) => {
     const readable = this.readable(name, value, start);
     this.store.set(name, { type: "readable", value: readable });
-  };
-
-  private register_service = <T extends ServiceContainer<J>, J>(service: T) => {
-    if (!this.store.has(service.name)) {
-      this.store.set(service.name, { type: "service", value: service });
-    }
-  };
-
-  private register_handler = <T extends Request<J>, J>(
-    name: string,
-    handle: (request: T) => J
-  ) => {
-    this.store.set(name, { type: "handler", value: { name, handle } });
   };
 
   private register_pipe = <T>(pipeline: string, pipe: Pipe<T>, at = 0) => {
