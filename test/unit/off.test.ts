@@ -1,11 +1,13 @@
-import { mediator } from "../../src";
-import Container from "../../src/container";
+import { mediator, Container } from "../../src";
 import { Event } from "../../src/types";
 
 let container: Container;
 let counter = 0;
 beforeEach(() => {
-  container = mediator.container(`${counter++}`, true);
+  container = mediator.container(
+    `${counter++}`,
+    true
+  ) as Container as Container;
 });
 
 test("off should remove an entry", () => {

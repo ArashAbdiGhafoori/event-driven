@@ -1,11 +1,10 @@
-import Container from "../../../src/container";
-import { mediator } from "../../../src/index";
+import { mediator, Container } from "../../../src/index";
 import { Pipe } from "../../../src/types";
 
 let container: Container;
 let counter = 0;
 beforeEach(() => {
-  container = mediator.container(`${counter++}`, true);
+  container = mediator.container(`${counter++}`, true) as Container;
 });
 
 test("pipeline should register", () => {

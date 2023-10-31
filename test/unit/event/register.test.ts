@@ -1,11 +1,10 @@
-import Container from "../../../src/container";
-import { mediator } from "../../../src/index";
+import { event as mediator, Container } from "../../../src/index";
 import { Event } from "../../../src/types";
 
 let container: Container;
 let counter = 0;
 beforeEach(() => {
-  container = mediator.container(`${counter++}`, true);
+  container = mediator.container(`${counter++}`, true) as Container;
 });
 
 test("event should register", () => {

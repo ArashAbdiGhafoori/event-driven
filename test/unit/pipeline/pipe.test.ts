@@ -1,10 +1,9 @@
-import Container from "../../../src/container";
-import { mediator } from "../../../src/index";
+import { mediator, Container } from "../../../src/index";
 
 let container: Container;
 let counter = 0;
 beforeEach(() => {
-  container = mediator.container(`${counter++}`, true);
+  container = mediator.container(`${counter++}`, true) as Container;
 });
 
 test("pipe should not work when nothing is registered", () => {

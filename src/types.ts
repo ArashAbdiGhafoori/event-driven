@@ -8,8 +8,6 @@ import type StartStopNotifier from "./types/functions/notifier";
 import type { Pipe, Subscribe, Unsubscribe, Update } from "./types/functions";
 import type Pipeline from "./types/pipeline";
 import type ServiceContainer from "./types/di/serviceContainer";
-import type Container from "./container";
-
 
 export type {
   Readable,

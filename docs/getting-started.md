@@ -33,7 +33,7 @@ Create a file in you project in my case i'll name it _`startup.ts`_:
 ```ts
 // startup.ts
 
-import type Container from "@arashghafoori/mediator/container";
+import type { Container } from "@arashghafoori/mediator";
 
 export default function startup(container: Container) {
   // register everything here...

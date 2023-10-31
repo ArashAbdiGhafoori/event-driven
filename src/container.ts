@@ -13,7 +13,7 @@ import type {
 import { safe_not_equal, noop } from "./util";
 import { LightContainer } from "./container.light";
 
-export default class Container extends LightContainer {
+export class Container extends LightContainer {
   public store: Map<string, StoreEntry> = new Map<string, StoreEntry>();
 
   //#region pipline

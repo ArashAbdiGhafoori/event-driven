@@ -1,11 +1,10 @@
-import Container from "../../../src/container";
-import { mediator } from "../../../src/index";
+import { mediator, Container } from "../../../src/index";
 import ServiceContainer from "../../../src/types/di/serviceContainer";
 
 let container: Container;
 let counter = 0;
 beforeEach(() => {
-  container = mediator.container(`${counter++}`, true);
+  container = mediator.container(`${counter++}`, true) as Container;
 });
 
 test("singleton should be available through container.get.service(<service-name>)", () => {
