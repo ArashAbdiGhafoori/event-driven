@@ -6,12 +6,11 @@ test("handler decorator should register handler", () => {
   class CommandHandler {
     @Handler(mediator, { name: "test", context: CommandHandler })
     not_test({ input }: { input: number }) {
-      count += input;
-      return count;
+      return count + input;
     }
   }
 
-  mediator.handle({ name: "test", input: 3 });
+  count = mediator.handle({ name: "test", input: 3 }) as number;
   expect(count).toBe(3);
 });
 
@@ -21,11 +20,10 @@ test("handler decorator should register handler with method name", () => {
   class CommandHandler {
     @Handler(mediator)
     test({ input }: { input: number }) {
-      count += input;
-      return count;
+      return count + input;
     }
   }
 
-  mediator.handle({ name: "test", input: 3 });
+  count = mediator.handle({ name: "test", input: 3 }) as number;
   expect(count).toBe(3);
 });

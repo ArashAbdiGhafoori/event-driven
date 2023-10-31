@@ -1,6 +1,6 @@
 {
   "name": "mediat",
-  "version": "2.0.3",
+  "version": "3.0.0",
   "description": "An easy way to manage events, pipelines, services, stores and cqrs in Typescript.",
   "main": "./lib/index.js",
   "module": "./lib/index.mjs",
