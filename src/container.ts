@@ -1,4 +1,3 @@
-import { StoreEntry } from "./types/StoreEntry";
 import type {
   Readable,
   Writable,
@@ -14,7 +13,7 @@ import { safe_not_equal, noop } from "./util";
 import { LightContainer } from "./container.light";
 
 export class Container extends LightContainer {
-  public store: Map<string, StoreEntry> = new Map<string, StoreEntry>();
+  public store: Map<string, unknown> = new Map<string, unknown>();
 
   //#region pipline
 
@@ -25,16 +24,30 @@ export class Container extends LightContainer {
    * @returns The output.
    */
   public pipe<T>(pipeline: string, input: T): T {
-    const line = this.resolve<Pipeline<T>>(pipeline, "pipeline");
-    line?.pipes.forEach((p) => {
-      input = p(input);
-    });
+    const line = this.resolve<Pipeline<T>>(pipeline, "p");
+    function* generator() {
+      for (let i = 0; i < line.pipes.length; i++) {
+        const pipe = line.pipes[i];
+        yield pipe;
+      }
+    }
+    const gen = generator();
+    function next(i: T): T {
+      const nxt = gen.next();
+      if (!nxt.done) i = nxt.value(i, next);
+      return i;
+    }
+
+    if (line) {
+      const nxt = gen.next();
+      if (!nxt.done) return nxt.value(input, next);
+    }
     return input;
   }
   //#endregion
 
   //#region store
-  
+
   /** Creates a writable store.
    *
    * implemented like svelte :)
@@ -106,11 +119,11 @@ export class Container extends LightContainer {
   //#endregion
 
   private get_readable_store = <T>(name: string) => {
-    return this.resolve<Readable<T>>(name, "readable");
+    return this.resolve<Readable<T>>(name, "r");
   };
 
   private get_writable_store = <T>(name: string) => {
-    return this.resolve<Writable<T>>(name, "writable");
+    return this.resolve<Writable<T>>(name, "w");
   };
 
   public readonly get = {
@@ -143,7 +156,7 @@ export class Container extends LightContainer {
     start: StartStopNotifier<T> = noop
   ) => {
     const writable = this.writable(name, value, start);
-    this.store.set(name, { type: "writable", value: writable });
+    this.store.set(`w#${name}`, writable);
   };
 
   // FIXME Invalidation & Rapid changes
@@ -153,17 +166,17 @@ export class Container extends LightContainer {
     start: StartStopNotifier<T> = noop
   ) => {
     const readable = this.readable(name, value, start);
-    this.store.set(name, { type: "readable", value: readable });
+    this.store.set(`r#${name}`, readable);
   };
 
   private register_pipe = <T>(pipeline: string, pipe: Pipe<T>, at = 0) => {
-    if (!this.store.has(pipeline))
-      this.store.set(pipeline, {
-        type: "pipeline",
-        value: { name: pipeline, pipes: [pipe as Pipe<unknown>] },
+    if (!this.store.has(`p#${pipeline}`))
+      this.store.set(`p#${pipeline}`, {
+        name: pipeline,
+        pipes: [pipe as Pipe<unknown>],
       });
     else {
-      const pl = this.resolve<Pipeline<unknown>>(pipeline, "pipeline");
+      const pl = this.resolve<Pipeline<unknown>>(pipeline, "p");
       if (pl) pl.pipes.splice(at, 0, pipe as Pipe<unknown>);
     }
   };

@@ -17,12 +17,12 @@ test("handler should return undefined when handler is not registered", () => {
     name = handlerName;
     value?: string;
   }
-  const actual = container.handle<R, string>({
-    name: handlerName,
-    value: input,
-  });
-
-  expect(actual).not.toBeDefined();
+  expect(()=>{
+    container.handle<R, string>({
+      name: handlerName,
+      value: input,
+    });
+  }).toThrow();
 });
 
 test("handler should handle", () => {

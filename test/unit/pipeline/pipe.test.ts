@@ -19,20 +19,23 @@ test("pipe should not work when nothing is registered", () => {
 test("pipe should work", () => {
   const pipelineName = "PiplineName";
 
-  const i_string = "1_string";
-  const nd_string = "2nd_string";
-  const rd_string = "3nd_string";
+  const i_string = "1";
   const expected = "expected";
 
-  const p1 = (i: string): string => (i === i_string ? nd_string : "");
-  const p2 = (i: string): string => (i === nd_string ? rd_string : "");
-  const p3 = (i: string): string => (i === rd_string ? expected : "");
+  container.register.pipe(pipelineName, (i, next) => {
+    if (i === "2") i = "3";
+    return next(i);
+  });
 
-  container.register.pipe(pipelineName, p3);
-  container.register.pipe(pipelineName, p2);
-  container.register.pipe(pipelineName, p1);
+  container.register.pipe(pipelineName, (i, next) => {
+    if (i === i_string) i = "2";
+    i = next(i);
+    if (i === "3") i = expected;
+    return i;
+  });
 
   const actual = container.pipe(pipelineName, i_string);
+
   expect(actual).toBe(expected);
 });
 
@@ -44,13 +47,18 @@ test("pipe should work in order", () => {
   const rd_string = "3nd_string";
   const expected = "expected";
 
-  const p1 = (i: string): string => (i === i_string ? nd_string : "");
-  const p2 = (i: string): string => (i === nd_string ? rd_string : "");
-  const p3 = (i: string): string => (i === rd_string ? expected : "");
-
-  container.register.pipe(pipelineName, p2);
-  container.register.pipe(pipelineName, p1, 0);
-  container.register.pipe(pipelineName, p3, 2);
+  container.register.pipe(pipelineName, (input, next) => {
+    if(input == nd_string) input = rd_string;
+    return next(input)
+  }, 1);
+  container.register.pipe(pipelineName, (input, next) => {
+    if(input == i_string) input = nd_string;
+    return next(input)
+  }, 0);
+  container.register.pipe(pipelineName, (input, next) => {
+    if(input == rd_string) input = expected;
+    return next(input)
+  }, 2);
 
   const actual = container.pipe(pipelineName, i_string);
   expect(actual).toBe(expected);

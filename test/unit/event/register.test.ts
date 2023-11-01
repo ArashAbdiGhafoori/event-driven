@@ -1,10 +1,9 @@
-import { event as mediator, Container } from "../../../src/index";
+import { EventContainer } from "../../../src/index";
 import { Event } from "../../../src/types";
 
-let container: Container;
-let counter = 0;
+let container: EventContainer;
 beforeEach(() => {
-  container = mediator.container(`${counter++}`, true) as Container;
+  container = new EventContainer();
 });
 
 test("event should register", () => {
@@ -17,12 +16,9 @@ test("event should register", () => {
     1
   );
 
-  const actual = container["store"].get(eventName) as {
-    type: "event";
-    value: Event<unknown>;
-  };
+  const actual = container["store"].get(`e#${eventName}`) as Event<unknown>;
   expect(actual).toBeDefined();
-  if (actual) expect(actual.value.count).toBe(1);
+  if (actual) expect(actual.count).toBe(1);
 });
 
 test("event should register multiple", () => {
@@ -40,10 +36,7 @@ test("event should register multiple", () => {
     return;
   });
 
-  const actual = container["store"].get(eventName) as {
-    type: "event";
-    value: Event<unknown>;
-  };
+  const actual = container["store"].get(`e#${eventName}`) as Event<unknown>;
   expect(actual).toBeDefined();
-  if (actual) expect(actual.value.listeners.length).toBe(4);
+  if (actual) expect(actual.listeners.length).toBe(4);
 });

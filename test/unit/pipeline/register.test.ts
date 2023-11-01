@@ -1,23 +1,32 @@
-import { mediator, Container } from "../../../src/index";
+import { Container } from "../../../src/index";
 import { Pipe } from "../../../src/types";
 
 let container: Container;
-let counter = 0;
 beforeEach(() => {
-  container = mediator.container(`${counter++}`, true) as Container;
+  container = new Container();
 });
 
 test("pipeline should register", () => {
   const pipelineName = "PiplineName";
-  container.register.pipe(pipelineName, (input: string) => {
+  container.register.pipe(pipelineName, (input: string, next) => {
+    next(input);
     return `you said: ${input}`;
   });
-  const actual = container["store"].get(pipelineName) as {
-    type: "pipeline";
-    value: { name: string; pipes: Pipe<string>[] };
+  container.register.pipe(pipelineName, (input: string, next) => {
+    next(input);
+    return `you said: ${input}`;
+  });
+  container.register.pipe(pipelineName, (input: string, next) => {
+    next(input);
+    return `you said: ${input}`;
+  });
+  const actual = container["store"].get(`p#${pipelineName}`) as {
+    name: string;
+    pipes: Pipe<string>[];
   };
   expect(actual).toBeDefined();
-  if (actual) expect(actual.value.name).toBe(pipelineName);
+  if (actual) expect(actual.name).toBe(pipelineName);
+  if (actual) expect(actual.pipes.length).toBe(3);
 });
 
 test("pipe should register", () => {
@@ -25,13 +34,13 @@ test("pipe should register", () => {
   const fn = (i: unknown) => i;
   container.register.pipe(pipelineName, fn);
 
-  const actual = container["store"].get(pipelineName) as {
-    type: "pipeline";
-    value: { name: string; pipes: Array<(i: unknown) => unknown> };
+  const actual = container["store"].get(`p#${pipelineName}`) as {
+    name: string;
+    pipes: Pipe<unknown>[];
   };
   expect(actual).toBeDefined();
   if (actual) {
-    expect(actual.value.pipes.length).toBe(1);
-    expect(actual.value.pipes[0]).toEqual(fn);
+    expect(actual.pipes.length).toBe(1);
+    expect(actual.pipes[0]).toEqual(fn);
   }
 });

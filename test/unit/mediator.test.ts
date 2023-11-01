@@ -1,5 +1,5 @@
 import { mediator, event, light } from "../../src/index";
- 
+
 test("container should create with mediator.container(<nonExistingName>)", () => {
   {
     const name = "containerName";
@@ -27,7 +27,7 @@ test("container should return without reinitializing", () => {
       return;
     });
     actual = mediator.container(name);
-    expect(actual["store"].get(eventName)).toBeDefined();
+    expect(actual["store"].get(`e#${eventName}`)).toBeDefined();
   }
   {
     const name = "containerName";
@@ -37,7 +37,7 @@ test("container should return without reinitializing", () => {
       return;
     });
     actual = event.container(name);
-    expect(actual["store"].get(eventName)).toBeDefined();
+    expect(actual["store"].get(`e#${eventName}`)).toBeDefined();
   }
   {
     const name = "containerName";
@@ -47,6 +47,6 @@ test("container should return without reinitializing", () => {
       return;
     });
     actual = light.container(name);
-    expect(actual["store"].get(eventName)).toBeDefined();
+    expect(actual["store"].get(`e#${eventName}`)).toBeDefined();
   }
 });

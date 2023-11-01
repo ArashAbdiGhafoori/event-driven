@@ -1,4 +1,4 @@
 export interface StoreEntry {
-  type: "readable" | "writable" | "event" | "pipeline" | "handler" | "service";
+  type: "r" | "w" | "e" | "p" | "h" | "s";
   value: unknown;
 }

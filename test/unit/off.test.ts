@@ -20,15 +20,9 @@ test("off should remove an entry", () => {
     1
   );
 
-  let actual = container["store"].get(eventName) as {
-    type: "event";
-    value: Event<unknown>;
-  };
+  let actual = container["store"].get(`e#${eventName}`) as Event<unknown>;
   expect(actual).toBeDefined();
-  container.off(eventName);
-  actual = container["store"].get(eventName) as {
-    type: "event";
-    value: Event<unknown>;
-  };
+  container.off(eventName, "event");
+  actual = container["store"].get(`e#${eventName}`) as Event<unknown>;
   expect(actual).not.toBeDefined();
 });
